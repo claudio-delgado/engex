@@ -84,11 +84,11 @@ exercises.forEach((element) => {
         //Iterate words in exercise.
         element["4_words"].forEach((word) => {
             //Distinguish between a normal word and a fillable expected answer.
-            let isNormalWord = isNaN(+word);
+            let isNormalWord = typeof(word) == 'string'//isNaN(+word);
             
             //Create div with the word or ? mark.
             let div = document.createElement("div")
-            div.className = "p-2 flex justify-center font-bold border-solid border-2 border-black "+(isNormalWord ? "text-white bg-red-500" : "text-black bg-gray-200 fillable")           
+            div.className = "py-2 px-0 flex justify-center font-bold border-solid border-2 border-black "+(isNormalWord ? "text-white bg-red-500" : "text-black bg-gray-200 fillable")           
             div.innerText = isNormalWord ? word : "?"
             if(!isNormalWord){
                 fillableIndex ++

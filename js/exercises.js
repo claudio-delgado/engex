@@ -117,6 +117,70 @@ let exercises = [
         "3_exercise_info": "Completá utilizando un pronombre y <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
         "4_words": ["Kathy", "isn't", "at", "home.", 0, "at", "work."],
         "5_possibleAnswers": [["You're", "He's", "I'm", "She's", "We're", "It's", "They're"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 13,
+        "3_exercise_info": "Completá utilizando un pronombre y <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["Mr", "Thomas", "is", "a", "very", "old", "man.", 0, "98."],
+        "5_possibleAnswers": [["You're", "He's", "I'm", "She's", "We're", "It's", "They're"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 14,
+        "3_exercise_info": "Completá utilizando un pronombre y <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["These", "chairs", "aren't", "beautiful,", "but", 0, "comfortable."],
+        "5_possibleAnswers": [["You're", "He's", "I'm", "She's", "We're", "It's", "They're"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 15,
+        "3_exercise_info": "Completá utilizando un pronombre y <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["The", "weather", "is", "nice", "today.", 0, "warm", "and", "sunny."],
+        "5_possibleAnswers": [["You're", "He's", "I'm", "She's", "We're", "It's", "They're"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 16,
+        "3_exercise_info": "Completá utilizando HERE o THERE y <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["'", 0, "your", "coat.'", "'Oh", "thank", "you", "very", "much."],
+        "5_possibleAnswers": [["Here're", "Here's", "There're", "There's", "I'm", "It's", "He's", "She's"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 17,
+        "3_exercise_info": "Completá utilizando pronombres y/o <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["My", "sister", 0, "tired.", 1, "thirsty."],
+        "5_possibleAnswers": [["am", "is", "are"], ["She's", "He's", "I'm", "You're", "We're", "They're"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 18,
+        "3_exercise_info": "Completá utilizando pronombres y/o <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["This", 0, "Paul.", 1, "scared."],
+        "5_possibleAnswers": [["am", "is", "are"], ["She's", "He's", "I'm", "You're", "We're", "They're"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 19,
+        "3_exercise_info": "Completá utilizando pronombres y/o <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["These", 0, "my", "parents.", 1, "cold."],
+        "5_possibleAnswers": [["am", "is", "are"], ["She's", "He's", "I'm", "You're", "We're", "They're"]]
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 20,
+        "3_exercise_info": "Completá utilizando pronombres y/o <strong>am</strong>, <strong>is</strong>, o <strong>are</strong>",
+        "4_words": ["Annie", "and", "I", 0, "friends.", 1, "hungry."],
+        "5_possibleAnswers": [["am", "is", "are"], ["She's", "He's", "I'm", "You're", "We're", "They're"]]
     }
 ]
 

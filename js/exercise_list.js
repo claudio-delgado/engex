@@ -92,7 +92,7 @@ exercises.forEach((item) => {
         let fullAnswered = true, corrected = false
         exerciseWords.forEach((word) => {
             //If it's a number, then it represents a blank for an answer.
-            if(!isNaN(+word)){
+            if(typeof(word) == 'number'){
                 fillableNbr = word*1
                 word = " __"+(exerciseAnswers[fillableNbr] ? "<strong>"+exerciseAnswers[fillableNbr]+"</strong>" : "?")+"__ "
                 fullAnswered &&= (exerciseAnswers[fillableNbr])
