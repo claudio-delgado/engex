@@ -1,0 +1,273 @@
+body{
+    font-family: "Roboto";
+}
+#exerciseFrame div{
+    font-size: 4vw;
+}
+.fillable{
+    background-color: rgb(229 231 235);
+    font-size: 4vw;
+}
+.fillable:hover{
+    cursor: pointer;
+    /*background-color: gray;*/
+}
+.fillable.selected{
+    background-color: gray !important;
+}
+/*.fillable.selected:hover{
+    cursor: pointer;
+    background-color: rgb(229 231 235) !important;
+}*/
+.clickable{
+    background-color: rgb(168 85 247);
+    font-size: 4vw;
+}
+.clickable:hover{
+    cursor: pointer;
+    background-color: rgb(88 28 135);
+}
+#options button{
+    font-size: 3vw;
+}
+.text-3vw{
+    font-size: 2.5vw;
+}
+
+/*index2.html*/
+.hide{
+    display: none;
+}
+.container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: center;*/
+    align-items: start;
+    /*margin: 20px;*/
+    width: none;
+}
+.drop-targets {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    margin: 20px 0;
+}
+.draggable-items {
+    border: solid 1px gray;
+    width: 100%;
+    height: 45px;
+    display: flex;
+    align-items: center;
+}
+.draggable-item{
+    margin: 0 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+    /*border: solid 1px black;*/
+}
+.draggable-item div {
+    height: 100%;
+}
+.pronoun {
+    background-color: #0284cf;
+}
+.auxiliary {
+    background-color: #69bd86;
+}
+.verb {
+    background-color: #bd69b3;
+}
+.object {
+    background-color: rgb(75, 211, 229); 
+}
+.draggable-item .c3{ width: 3em; }
+.draggable-item .c4{ width: 3.8em; }
+.draggable-item .c5{ width: 4.6em; }
+.draggable-item .c6{ width: 5.4em; }
+.draggable-item-male-left, .draggable-item-male-right {
+    font-size: 12px;
+    z-index: 2; 
+    height: 100%;
+    position: relative;
+}
+.draggable-item-female-left, .draggable-item-female-right {
+    font-size: 12px;
+    z-index: 2; 
+    width: 1.6em; height: 100%;
+    position: relative;
+}
+.draggable-item-male-left{
+    margin-left: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    -webkit-border-radius: .5em 0em 0em .5em;
+    -moz-border-radius: .5em 0em 0em .5em;
+    border-radius: .5em 0em 0em .5em;
+}
+.draggable-item-left{
+    width: 0.3em;
+    -webkit-border-radius: .5em 0em 0em .5em;
+    -moz-border-radius: .5em 0em 0em .5em;
+    border-radius: .5em 0em 0em .5em;
+}
+.draggable-item-right{
+    width: 0.3em;
+    -webkit-border-radius:  0em .5em .5em 0em;
+    -moz-border-radius: 0em .5em .5em 0em;
+    border-radius: 0em .5em .5em 0em;
+}
+.draggable-item-male-right{
+    margin-right: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    -webkit-border-radius: 0em .5em .5em 0em;
+    -moz-border-radius: 0em .5em .5em 0em;
+    border-radius: 0em .5em .5em 0em;
+}
+.draggable-item-male-left .l {
+    width: 2em;
+    height: 2em;
+    margin-left: -1.5em;
+    -webkit-border-radius: 4em;
+    -moz-border-radius: 4em;
+    border-radius: 4em;
+}
+.draggable-item-male-left.pronoun span{ background-color: #0284cf; }
+.draggable-item-male-left.object span{ background-color: rgb(75, 211, 229); }
+.draggable-item-male-left.verb span{ background-color: #bd69b3; }
+.draggable-item-male-left.auxiliary span{ background-color: #69bd86; }
+.draggable-item-male-right .r {
+    width: 2em;
+    height: 2em;
+    margin-right: -1.5em;
+    -webkit-border-radius: 4em;
+    -moz-border-radius: 4em;
+    border-radius: 4em;
+}
+.draggable-item-male-right.pronoun span{ background-color: #0284cf; }
+.draggable-item-male-right.object span{ background-color: rgb(75, 211, 229); }
+.draggable-item-male-right.verb span{ background-color: #bd69b3; }
+.draggable-item-male-right.auxiliary span{ background-color: #69bd86; }
+.draggable-item-female-left{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    -webkit-border-radius: .5em 0em 0em .5em;
+    -moz-border-radius: .5em 0em 0em .5em;
+    border-radius: .5em 0em 0em .5em;
+    -webkit-mask-image: radial-gradient(
+      circle 5px at 6px 50%,
+      transparent 12px,
+      purple 0
+    );
+}
+.draggable-item-female-right{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    -webkit-border-radius: 0em .5em .5em 0em;
+    -moz-border-radius: 0em .5em .5em 0em;
+    border-radius: 0em .5em .5em 0em;
+    -webkit-mask-image: radial-gradient(
+      circle 5px at calc(100% - 6px) 50%,
+      transparent 12px,
+      purple 0
+    );
+}
+
+
+
+.draggable-item.c4{ width: 7.5em; }
+.draggable-item.c5{ width: 9em; }
+.draggable-item .text{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; height: 100%;
+    font: bold 15pt Roboto;
+    color: white;
+    background-color: transparent !important;
+}
+.draggable-item.femaleLeft .text{
+    margin-left: 15%;
+}
+.draggable-item.femaleLeftRight .text{
+    margin-left: 15%;
+    margin-right: 15%;
+}
+.draggable-item.maleLeft, .draggable-item.maleLeft span {
+    background-color: #0284cf;
+}
+.draggable-item.femaleLeft, .draggable-item.femaleLeft span,
+.draggable-item.femaleLeftRight, .draggable-item.femaleLeftRight span {
+    background-color: #bd69b3;
+}
+.draggable-item.femaleLeft{
+    font-size: 12px; 
+    z-index:1;
+    height: 4em;
+    margin: 20px;
+    position: relative;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    -webkit-mask-image: radial-gradient(
+      circle 5px at 6px 50%,
+      transparent 12px,
+      purple 0
+    );
+}
+.draggable-item.femaleLeftRight{
+    font-size: 12px; 
+    z-index:1;
+    height: 4em;
+    margin: 20px;
+    position: relative;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    -webkit-mask: 
+        radial-gradient( circle 5px at 6px 50%, transparent 12px, purple 0) left;
+    -webkit-mask-size:100% 100%; /* each one half the size */
+    -webkit-mask-repeat:no-repeat; /* don't forget this */
+}
+
+.box {
+    height: 101px;
+    width: 100px;
+    /*border: solid 3px #ccc;*/
+    margin: -3px;
+
+    /* align items in the box */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.drag-over {
+    border: dashed 3px red;
+}
+.item {
+    height: 103px;
+    width: 131px;
+    /*background-color: #F0DB4F;*/
+}
+.item.female {
+    z-index: 200;
+}
+.item.male {
+    z-index: 1;
+}
+.item.you {
+    background-image: url(images/puzzle.ni.ns.hd.ni.1_.you.png);
+}
+.item.watch {
+    background-image: url(images/puzzle.mi.ns.nd.ni.2_.watch.png);
+}

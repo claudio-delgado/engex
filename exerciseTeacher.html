@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/d2bdb5ef52.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="p-0 bg-red-200">
+    <div class="flex flex-col h-screen">
+        <header>
+            <div class="w-full p-1 text-3vw">
+                <span id="module" class="bg-blue-500 rounded text-white font-bold hover:bg-blue-700 hover:cursor-pointer px-2 me-2"></span>Módulo: <span id="module_info" class="font-bold">Present</span>
+            </div>
+            <div class="w-full p-1 text-3vw">
+                <span id="submodule" class="bg-green-500 rounded text-white font-bold hover:bg-green-700 hover:cursor-pointer px-2 me-2"></span>Submódulo: <span id="submodule_info" class="font-bold">Ser o Estar (Verb TO BE)</span>
+            </div>
+            <div class="w-full p-1 text-3vw">
+                <span id="exercise" class="bg-pink-500 rounded text-white font-bold hover:bg-pink-700 hover:cursor-pointer px-2 me-2"></span>Ejercicio: <span id='exercise_info'></span>
+            </div>
+        </header>
+        <main class="flex-grow mt-2">
+            <div id="exerciseFrame" class="w-full grid grid-flow-col justify-stretch p-1 border-solid border-2 border-black bg-red-200">
+            </div>
+            <div id="correctionTip" class="w-full hidden grid grid-flow-col justify-stretch p-1 border-solid border-2 border-black bg-red-300">
+                <div class="w-full p-1 text-3vw"><i class="fa fa-info me-3"></i>Elegí una respuesta marcada como equivocada para ver el comentario asociado.</div>
+            </div>
+            <div id="correctionPanel" class="hide">
+                <div class="w-full p-1 text-3vw">Ingresá/modificá un comentario indicando por qué es incorrecta la respuesta:</div>
+                <div id="correctionMsg" class="w-full flex justify-stretch p-1 border-solid border-2 border-black bg-purple-200">
+                    <input id="inputCorrection" type="text" class="h-18 shrink placeholder:italic placeholder:bold placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 text-3vw"/>
+                    <button id="saveCorrection" disabled type="button" class="w-24 button flex-none text-3vw m-1 ms-2 p-2 px-3 flex justify-center items-stretch font-bold border-solid border-2 border-black text-gray-600 bg-gray-300">Grabar</button>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div id="answers" class="hide">
+                <div class="w-full p-1 text-2xl">Respuestas ofrecidas:</div>
+                <div id="answersFrame" class="w-full grid grid-flow-col justify-stretch p-1 border-solid border-2 border-black bg-purple-200">
+                </div>
+            </div>
+            <div id="options" class="w-full grid grid-flow-col justify-stretch p-1 border-solid border-2 border-black bg-blue-200">
+                <button type="button" id="regresar" class="m-1 p-2 flex justify-center items-stretch font-bold border-solid border-2 border-black bg-blue-500"><i class="p-2 fa fa-solid fa-arrow-left"></i>Anterior</button>
+                <button type="button" id="correction" class="m-1 p-2 flex justify-center font-bold border-solid border-2 border-black bg-blue-500">Corregir<i class="p-2 fa fa-solid fa-check-double"></i></button>
+                <button type="button" id="home" class="m-1 py-2 flex justify-center font-bold border-solid border-2 border-black bg-blue-500"><i class="py-2 fa fa-solid fa-home"></i></button>
+                <button type="button" id="avanzar" class="m-1 p-2 flex justify-center items-stretch font-bold border-solid border-2 border-black bg-blue-500">Siguiente<i class="p-2 fa fa-solid fa-arrow-right"></i></button>
+            </div>
+        </footer>
+    </div>
+</body>
+<script src="exercises.js"></script>
+<script src="cookies.js"></script>
+<script src="exerciseTeacher.js"></script>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&family=Source+Code+Pro&display=swap" rel="stylesheet">    <title>Puzzle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://kit.fontawesome.com/d2bdb5ef52.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body class="p-0 bg-red-200">
+    <div class="flex flex-col h-screen">
+        <h2 id="module-heading-1">
+            <div class="w-full px-3 p-2 text-black-500 gap-3" data-accordion-target="#submodule-body-1" aria-expanded="true" aria-controls="submodule-body-1">
+                <p class="text-3vw"><button type="button" id="home" class="me-2 px-1 border border-2 border-violet-500 bg-violet-300 rounded"><i class="fa fa-home"></i></button><strong>Corrección de ejercicios</strong></p>
+                <p class="my-3">Enviale el siguiente código de corrección a tu alumno/a y él te responderá enviándote un código de corrección.</p>
+            </div>
+        </h2>
+        <div id="obtainCode" class="w-full flex mt-3 p-3">
+            <input id='inputGetCode' readonly class="h-14 placeholder:italic placeholder:bold placeholder:text-slate-400 block bg-white w-full border border-slate-300 rounded-md py-2 pl-3 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 text-3vw" type="text"/>
+            <button type="button" id="copy" class="p-2 mx-2 flex-1 text-3vw flex justify-center font-bold border-solid border-2 border-black text-white bg-green-500">Copiar<i class="fa fa-copy p-1 pl-2"></i></button>
+            <button type="button" id="cancelGet" class="p-2 flex-1 text-3vw flex justify-center font-bold border-solid border-2 border-black text-white bg-gray-500">Cancelar<i class="fa fa-cancel p-1 pl-2"></i></button>
+        </div>
+    </div>
+</body>
+<script src="exercises.js"></script>
+<script src="cookies.js"></script> 
+ 
+<script>
+
+    //Get cookie with progress.
+    let progress = getCookie("progress") ? JSON.parse(getCookie("progress")) : []
+    let errorCode = ""
+
+    //Initialize alerts.
+    let alert = (alertStructure, callback = false) => {
+        Swal.fire(alertStructure).then((result) => {
+            if(callback){
+                if (result.isConfirmed) {
+                    /* Get the text field */
+                    let copyError = document.getElementById("inputErrorCode");
+                    /* Select the text field */
+                    copyError.select();
+                    /* Copy the text inside the text field */
+                    document.execCommand("copy");
+                    Swal.fire("", "Se copió el código "+copyError.value+" al portapapeles. Pegalo en el mensaje a tu profe.", "success");
+                }
+            }
+        })
+    }
+
+    //Structures for different types of alerts.
+    let alertCodeCopied = {
+        title: 'Bravo!',
+        text: 'Copiaste tu código de progreso al portapapeles. Pegalo en un archivo de texto y guardalo.',
+        confirmButtonText: 'De acuerdo'
+    }
+
+    //Build progress code string from cookie.
+    progress.forEach((exerciseString) => {
+        document.querySelector("#inputGetCode").value += ";"+exerciseString;
+    })
+    document.querySelector("#inputGetCode").value = document.querySelector("#inputGetCode").value.substr(1)
+
+    // Event handler for clicking Copy progress code.
+    var clickCopyCode = (e) => {
+        /* Get the text field */
+        let copyText = document.getElementById("inputGetCode");
+        /* Select the text field */
+        copyText.select();
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+        alert(alertCodeCopied)
+    }
+
+    document.querySelector("#copy").addEventListener('click', clickCopyCode);
+    
+    // Event handler for clicking home.
+    var homeClick = (e) => {
+        window.location = "./"
+    }
+
+    document.querySelector("#home").addEventListener('click', homeClick);
+</script>
+</html>
