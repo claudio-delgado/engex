@@ -93,6 +93,13 @@ let clickableClick = (e) => {
         //Replace words in error message. (Current word and wrong answer)
         customAlertRightAnswer.text = tokenReplace(customAlertRightAnswer.text, tokens)
         alert(customAlertRightAnswer)
+        //Turn wrong mark into a selected one.
+        document.querySelector(".clicked").classList.remove(...wrongWordClasses.split(" "))
+        document.querySelector(".clicked").classList.add(...selectedWordClasses.split(" "))
+        document.querySelector("#tokenWord").classList.remove(...wrongWordClasses.split(" "))
+        document.querySelector("#tokenWord").classList.add(...selectedWordClasses.split(" "))
+        /*lastSelected.classList.remove(...wrongWordClasses.split(" "))
+        lastSelected.classList.remove(...completedWordClasses.split(" "))*/
         //Remove vocabulary answer selected.
         document.querySelector("#"+answerId).remove()
         //Check if there are no more true answers and then clear wrong ones.
@@ -138,7 +145,7 @@ let writeExerciseInfo = () =>{
                 let currentWord = isNormalWord ? word.replace(".", "") : word
                 let lastWord = windex+1 == wordAmount
                 //Complete exercise words.
-                let classes = " "+(!isNormalWord ? unselectabledWordClasses : (currentWordIndex == vocabularyWordIndex ? selectedWordClasses : unselectedWordClasses))
+                let classes = " "+(!isNormalWord ? unselectabledWordClasses : (currentWordIndex == vocabularyWordIndex ? selectedWordClasses + " clicked" : unselectedWordClasses))
                 if(!exerciseWordListBlocked){
                     document.querySelector("#exercise_words").innerHTML+= "<span"+(isNormalWord ? " data-index=\""+currentWordIndex+"\"":"")+" class=\"mx-2"+classes+(lastWord ? " me-0" : "")+"\">"+(isNormalWord ? currentWord : "__?__")+"</span>"+(lastWord ? "." : "")
                 }
@@ -177,10 +184,10 @@ let writeExerciseInfo = () =>{
                                             document.getElementById("answersFrame").appendChild(divAnswers)
                                         } else {
                                             //Mark token as completed.
-                                            document.querySelectorAll(".tokenSelected").forEach((elem) => {
+                                            document.querySelectorAll(".clicked, #tokenWord").forEach((elem) => {
                                                 elem.classList.remove(...selectedWordClasses.split(" "))
+                                                elem.classList.remove(...wrongWordClasses.split(" "))
                                                 elem.classList.add(...completedWordClasses.split(" "))
-                                                
                                             })
                                             //Add translation at the end.
                                         }
@@ -258,16 +265,28 @@ writeExerciseInfo()
 var unselectedTokensClick = (e) => {
     //Unselect current selected token.
     let lastSelected = document.querySelector(".tokenSelected")
+    let lastClicked = document.querySelector(".clicked")
     //Become everything "non selected"
     if(lastSelected != null){
         lastSelected.classList.remove(...selectedWordClasses.split(" "))
         lastSelected.classList.remove(...wrongWordClasses.split(" "))
+        //lastSelected.classList.remove(...completedWordClasses.split(" "))
+        lastSelected.classList.remove("clicked")
         lastSelected.classList.add(...unselectedWordClasses.split(" "))
         lastSelected.addEventListener('click', unselectedTokensClick);
+    }
+    if(lastClicked != null){
+        lastClicked.classList.remove(...selectedWordClasses.split(" "))
+        lastClicked.classList.remove(...wrongWordClasses.split(" "))
+        //lastClicked.classList.remove(...completedWordClasses.split(" "))
+        lastClicked.classList.remove("clicked")
+        lastClicked.classList.add(...unselectedWordClasses.split(" "))
+        lastClicked.addEventListener('click', unselectedTokensClick);
     }
     //Mark as selected new token.
     e.target.classList.remove(...unselectedWordClasses.split(" "))
     e.target.classList.add(...selectedWordClasses.split(" "))
+    e.target.classList.add("clicked")
     vocabularyWordIndex = e.target.getAttribute("data-index")*1
     vocabularyGroupIndex = 0
     //Update current token selected on screen.
