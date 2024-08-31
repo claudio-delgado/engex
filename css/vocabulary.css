@@ -1,0 +1,25 @@
+body{
+    font-family: "Roboto";
+}
+#exerciseFrame div{
+    font-size: 4vw;
+}
+.clickable{
+    background-color: rgb(168 85 247);
+    font-size: calc(6px + 2vw);
+}
+.clickable:hover{
+    cursor: pointer;
+    background-color: rgb(88 28 135);
+}
+#options button{
+    font-size: 3vw;
+}
+.text-3vw{
+    font-size: 2.5vw;
+}
+
+/*index2.html*/
+.hide{
+    display: none;
+}

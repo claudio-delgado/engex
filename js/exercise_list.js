@@ -89,6 +89,7 @@ exercises.forEach((item) => {
         p1.className = "flex justify-start items-center"
         p1.innerHTML = "<img src=\"images/hellokitty-icon.png\" style=\"max-width: 8%; height: auto;\" class=\"me-2\" />"
         let span1 = document.createElement("span")
+        span1.className = "leading-tight"
         let fullAnswered = true, corrected = false
         exerciseWords.forEach((word) => {
             //If it's a number, then it represents a blank for an answer.
@@ -115,6 +116,12 @@ exercises.forEach((item) => {
         button1.setAttribute("onClick", "window.location=\"exercise.html?module="+item["1_module"]+"&submodule="+item["2_submodule"]+"&exercise="+item["3_exercise"]+"\"")
         button1.innerHTML = "<span class=\"me-2\">Abrir</span><i class=\"ms-2 fa fa-folder-open\"></i>"
         p3.appendChild(button1)
+        let button2 = document.createElement("button")
+        button2.className = "ms-2 p-0 px-3 button text-white bg-pink-800"
+        button2.setAttribute("type", "button")
+        button2.setAttribute("onClick", "window.location=\"exercise_vocabulary.html?module="+item["1_module"]+"&submodule="+item["2_submodule"]+"&exercise="+item["3_exercise"]+"\"")
+        button2.innerHTML = "<i class=\"fa fa-spell-check\"></i>"
+        p3.appendChild(button2)
         div3.appendChild(p3)
         div1.appendChild(div3)
         exerciseNbr++
