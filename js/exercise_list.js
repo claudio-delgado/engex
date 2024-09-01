@@ -67,15 +67,15 @@ exercises.forEach((item) => {
         //Check progress for this exercise.
         let exerciseAnswers = [], exerciseFullyCorrected = false, fillableNbr = null
         progress.forEach((progressItem) => {
-            progressModule = progressItem.substr(1,2)*1
-            progressSubmodule = progressItem.substr(4,2)*1
-            progressExercise = progressItem.substr(7,2)*1
+            progressModule = progressItem.substr(1,2)*1 //M[xx]
+            progressSubmodule = progressItem.substr(4,2)*1 //MxxS[xx]
+            progressExercise = progressItem.substr(7,2)*1 //MxxSxxE[xx]
             if(progressModule == item["1_module"] && progressSubmodule == item["2_submodule"] && progressExercise == item["3_exercise"]){
-                fillableNbr = progressItem.substr(10,1)-1
-                answerNbr = progressItem.substr(12,1)-1
+                fillableNbr = progressItem.substr(10,1)-1 //MxxSxxExxF[x]
+                answerNbr = progressItem.substr(12,2)-1 //MxxSxxExxFxA[xx]
                 exerciseAnswers.push(item["5_possibleAnswers"][fillableNbr][answerNbr])
                 exerciseFullyCorrected = !fillableNbr ? true : exerciseFullyCorrected
-                exerciseFullyCorrected&&= progressItem.length > 13
+                exerciseFullyCorrected&&= progressItem.length > 14
             }
         })
         let div1 = document.createElement("div")

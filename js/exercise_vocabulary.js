@@ -18,7 +18,9 @@ let progress = getCookie("progress") ? JSON.parse(getCookie("progress")) : []
 //Current vocabulary word index.
 let vocabularyWordIndex = 0
 //Current vocabulary answers group index.
-var vocabularyGroupIndex = 0
+let vocabularyGroupIndex = 0
+let vocabularyMaxGroupIndex = 0
+let translation = ""
 //Token classes
 let selectedWordClasses = "px-1 tokenSelected font-bold border border-2 border-black bg-white text-violet-500"
 let unselectedWordClasses = "px-1 hover:cursor-pointer hover:bg-pink-200 tokenUnselected font-bold border border-1 border-gray-800 bg-gray-200 text-black"
@@ -98,8 +100,7 @@ let clickableClick = (e) => {
         document.querySelector(".clicked").classList.add(...selectedWordClasses.split(" "))
         document.querySelector("#tokenWord").classList.remove(...wrongWordClasses.split(" "))
         document.querySelector("#tokenWord").classList.add(...selectedWordClasses.split(" "))
-        /*lastSelected.classList.remove(...wrongWordClasses.split(" "))
-        lastSelected.classList.remove(...completedWordClasses.split(" "))*/
+
         //Remove vocabulary answer selected.
         document.querySelector("#"+answerId).remove()
         //Check if there are no more true answers and then clear wrong ones.
@@ -109,13 +110,18 @@ let clickableClick = (e) => {
                 //Answers group already completed.
                 document.querySelector("#answersFrame .false").remove()
                 document.getElementById("answersFrame").innerHTML = ""
-                //document.querySelector("#exercise_words").innerHTML = ""
             }
             //Show info about exercise and vocabulary answers on screen.
             writeExerciseInfo()
         }
         //Add correct answer as text under the question.
         document.querySelector("#vocabularyAnswers").innerHTML+= "<span class=\"text-green-700 font-bold me-2\">"+e.target.innerText+"<i class=\"fa fa-check ms-1\"/>.</span>";
+        let tokenSelected = document.querySelectorAll(".tokenSelected").length
+        let tokenUnselected = document.querySelectorAll(".tokenUnselected").length
+        let tokenWrong = document.querySelectorAll(".tokenWrong").length
+        if(vocabularyGroupIndex >= vocabularyMaxGroupIndex && !tokenSelected && !tokenUnselected && !tokenWrong){
+            document.querySelector("#vocabularyAnswers").innerHTML+= "<span class=\"text-green-900 font-bold me-2\"><br/>Traducción aproximada: "+translation.toUpperCase()+"</span>"
+        }
     } else {
         let customAlertWrongAnswer = {title: 'Oops!',
                                       text: 'No, #1 no #2.',
@@ -150,15 +156,18 @@ let writeExerciseInfo = () =>{
                     document.querySelector("#exercise_words").innerHTML+= "<span"+(isNormalWord ? " data-index=\""+currentWordIndex+"\"":"")+" class=\"mx-2"+classes+(lastWord ? " me-0" : "")+"\">"+(isNormalWord ? currentWord : "__?__")+"</span>"+(lastWord ? "." : "")
                 }
                 if(isNormalWord &&  currentWordIndex == vocabularyWordIndex){
+                    let vocabularyFound = false
                     //Iterate vocabulary elements.
                     exercise_vocabulary.forEach((vocElem) => {
                         //Exercise found? Then process each word separately.
                         if(vocElem["1_module"] == module && vocElem["2_submodule"] == submodule && vocElem["3_exercise"] == exercise){
-                            let translation = vocElem["5_translation"]
+                            vocabularyFound = true
+                            translation = vocElem["5_translation"]
                             //Iterate current exercise vocabulary word groups.
                             vocElem["4_words"].forEach((vocToken, tokenIndex) => {
                                 if(vocabularyWordIndex == tokenIndex){
                                     let token = vocToken["1_token"]
+                                    vocabularyMaxGroupIndex = vocToken["2_translations"].length
                                     if(token == currentWord) {
                                         document.querySelector("#tokenWord").classList.remove(...wrongWordClasses.split(" "))
                                         document.querySelector("#tokenWord").classList.add(...selectedWordClasses.split(" "))
@@ -167,6 +176,7 @@ let writeExerciseInfo = () =>{
                                         let answerIndex = 0;
                                         let divAnswers = document.createElement("div")
                                         if(vocToken["2_translations"].length > vocabularyGroupIndex){
+                                            vocToken["2_translations"][vocabularyGroupIndex].sort( () => .5 - Math.random() );
                                             //Iterate current group of vocabulary answers for the token.
                                             vocToken["2_translations"][vocabularyGroupIndex].forEach((translation) => {
                                                 //Create div with the possible answer.
@@ -189,13 +199,21 @@ let writeExerciseInfo = () =>{
                                                 elem.classList.remove(...wrongWordClasses.split(" "))
                                                 elem.classList.add(...completedWordClasses.split(" "))
                                             })
-                                            //Add translation at the end.
                                         }
                                     }
                                 }
                             })
                         }
                     })
+                    if(!vocabularyFound){
+                        let tokenWord = document.querySelector("#tokenWord")
+                        tokenWord.classList.add(...selectedWordClasses.split(" "))
+                        tokenWord.innerText = currentWord
+                        let vocAnswers = document.querySelector("#vocabularyAnswers")
+                        vocAnswers.innerText = "Lo siento. No hay información de vocabulario disponible para el ejercicio."
+                        //vocAnswers.classList.remove("text-3vw")
+                        vocAnswers.className+= " text-red-500 text-2vw"
+                    }
                 }
                 currentWordIndex+= isNormalWord
             })
@@ -270,17 +288,17 @@ var unselectedTokensClick = (e) => {
     if(lastSelected != null){
         lastSelected.classList.remove(...selectedWordClasses.split(" "))
         lastSelected.classList.remove(...wrongWordClasses.split(" "))
-        //lastSelected.classList.remove(...completedWordClasses.split(" "))
         lastSelected.classList.remove("clicked")
         lastSelected.classList.add(...unselectedWordClasses.split(" "))
         lastSelected.addEventListener('click', unselectedTokensClick);
     }
     if(lastClicked != null){
-        lastClicked.classList.remove(...selectedWordClasses.split(" "))
-        lastClicked.classList.remove(...wrongWordClasses.split(" "))
-        //lastClicked.classList.remove(...completedWordClasses.split(" "))
         lastClicked.classList.remove("clicked")
-        lastClicked.classList.add(...unselectedWordClasses.split(" "))
+        if(!lastClicked.classList.contains("tokenCompleted")){
+            lastClicked.classList.remove(...selectedWordClasses.split(" "))
+            lastClicked.classList.remove(...wrongWordClasses.split(" "))
+            lastClicked.classList.add(...unselectedWordClasses.split(" "))
+        }
         lastClicked.addEventListener('click', unselectedTokensClick);
     }
     //Mark as selected new token.
@@ -340,20 +358,6 @@ var currentExerciseClick = (e) => {
 }
 
 document.querySelector("#exercise").addEventListener('click', currentExerciseClick);
-
-// Event handler for clicking progress.
-var progressClick = (e) => {
-    window.location = "progress.html"
-}
-
-document.querySelector("#progress").addEventListener('click', progressClick);
-
-// Event handler for clicking correction.
-var correctionClick = (e) => {
-    window.location = "correction.html"
-}
-
-document.querySelector("#correction").addEventListener('click', correctionClick);
 
 // Event handler for clicking back.
 var backClick = (e) => {

@@ -100,20 +100,20 @@ exercises.forEach((element) => {
         //Check if current module, submodule and exercise was answered and saved in progress.
         //If that's the case, update fillable with answer already saved.
         progress.forEach((item) => {
-            progressModule = item.substr(1,2)*1 //Mxx
-            progressSubmodule = item.substr(4,2)*1 //Sxx
-            progressExercise = item.substr(7,2)*1 //Exx
+            progressModule = item.substr(1,2)*1 //M[xx]
+            progressSubmodule = item.substr(4,2)*1 //MxxS[xx]
+            progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
             if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
-                fillableId = item.substr(9,2) //Fx
-                answerId = item.substr(11,2) //Ax
+                fillableId = item.substr(9,2) //MxxSxxExx[Fx]
+                answerId = item.substr(11,3) //MxxSxxExxFx[Axx]
                 let fillableElem = document.querySelector("#"+fillableId) 
                 fillableElem.innerText = document.querySelector("#"+answerId).innerText
                 //Correction info available?
-                if(item.length > 13){
-                    let correction = item.substr(13,2) //Rx
+                if(item.length > 14){
+                    let correction = item.substr(14,2) //MxxSxxExxFxAxx[Rx]
                     let result = correction.substr(1) //1 or 0
                     //Answer corrected wrong?
-                    if(item.length > 15){
+                    if(item.length > 16){
                         //Mark answer as wrong.
                         fillableElem.classList.remove("bg-green-500", "bg-gray-200")
                         fillableElem.classList.add("bg-red-500")
@@ -217,13 +217,13 @@ var markableClick = (e) => {
         if(fillableAssociated.classList.contains('bg-green-500')){
             //Save correction in progress cookie
             progress.forEach((item, index, object) => {
-                progressModule = item.substr(1,2)*1
-                progressSubmodule = item.substr(4,2)*1
-                progressExercise = item.substr(7,2)*1
+                progressModule = item.substr(1,2)*1 //M[xx]
+                progressSubmodule = item.substr(4,2)*1 //MxxS[xx]
+                progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
                 if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
-                    fillableId = item.substr(9,2)
+                    fillableId = item.substr(9,2) //MxxSxxExx[Fx]Axx
                     if(fillableId == fillableAssociated.id){
-                        object[index] = object[index].substr(0, 13)+"R1"
+                        object[index] = object[index].substr(0, 14)+"R1"
                     }
                 }
             })
@@ -269,19 +269,19 @@ var fillableClick = (e) => {
             //If that's the case, update correction info saved on screen.
             progress.forEach((item) => {
                 progressModule = item.substr(1,2)*1 //Mxx
-                progressSubmodule = item.substr(4,2)*1 //Sxx
-                progressExercise = item.substr(7,2)*1 //Exx
+                progressSubmodule = item.substr(4,2)*1 //MxxS[xx]
+                progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
                 if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
-                    progressFillableId = item.substr(9,2) //Fx
-                    progressAnswerId = item.substr(11,2) //Ax
+                    progressFillableId = item.substr(9,2) //MxxSxxExx[Fx]
+                    progressAnswerId = item.substr(11,3) //MxxSxxExxFx[Axx]
                     //Fillable answered found
                     if(progressFillableId == selectedItem.id){
                         //Correction info available and answer corrected wrong?
-                        if(item.length > 15){
+                        if(item.length > 16){
                             //Show correction panel with info associated.
                             document.querySelector("#correctionPanel").classList.toggle("hide")
-                            let commentString = item.substr(15) //Cxxxxxxx...
-                            let encodedComment = commentString.substr(1) //xxxxxxx...
+                            let commentString = item.substr(16) //MxxSxxExxFxAxxRx[Cxxxxxxx...]
+                            let encodedComment = commentString.substr(1) //MxxSxxExxFxAxxRxC[xxxxxxx...]
                             document.querySelector("#inputCorrection").value = atob(encodedComment)
                             document.querySelector("#saveCorrection").classList.remove("text-gray-600")
                             document.querySelector("#saveCorrection").classList.remove("bg-gray-300")
@@ -334,14 +334,14 @@ document.querySelector("#inputCorrection").addEventListener('keyup', inputCorrec
 var saveCorrection = (e) => {
     //Save correction in progress cookie
     progress.forEach((item, index, object) => {
-        progressModule = item.substr(1,2)*1
-        progressSubmodule = item.substr(4,2)*1
-        progressExercise = item.substr(7,2)*1
+        progressModule = item.substr(1,2)*1 //M[xx]
+        progressSubmodule = item.substr(4,2)*1 //MxxS[xx]
+        progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
         if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
-            fillableId = item.substr(9,2)
+            fillableId = item.substr(9,2) //MxxSxxExx[Fx]Axx
             fillableSelected = document.querySelector(".fillableSelected")
             if(fillableId == fillableSelected.id){
-                object[index] = object[index].substr(0, 13)+"R0"+"C"+btoa(document.querySelector("#inputCorrection").value)
+                object[index] = object[index].substr(0, 14)+"R0"+"C"+btoa(document.querySelector("#inputCorrection").value)
             }
         }
     })

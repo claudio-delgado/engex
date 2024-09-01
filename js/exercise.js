@@ -33,7 +33,7 @@ let alert = (alertStructure, callback = false) => {
                     progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
                     if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
                         fillableId = item.substr(9,2) //MxxSxxExx[Fx]
-                        answerId = item.substr(11,2) //MxxSxxExxFx[Ax]
+                        answerId = item.substr(11,3) //MxxSxxExxFx[Axx]
                         if(fillableId == selectedFillable.id){
                             object.splice(index, 1)
                         }
@@ -97,8 +97,11 @@ exercises.forEach((element) => {
             //Put div on screen
             document.getElementById('exerciseFrame').appendChild(div)
         })
+        document.querySelector("#exerciseNotes").innerHTML = element["5_notes"] != null ? element["5_notes"] : ""
         //Answer group index.
         let answerGroupIndex = 0
+        //Answer index.
+        let answerIndex = 0;
         //Iterate possible answers in exercise.
         element["5_possibleAnswers"].forEach((fillable) => {
             //Create div with the collection of answers.
@@ -108,19 +111,24 @@ exercises.forEach((element) => {
             div.id = "answersGroup"+answerGroupIndex
             //Put div on screen
             document.getElementById('answersFrame').appendChild(div)
-            //Answer index.
-            let answerIndex = 0;
             fillable.forEach((answer) => {
                 //Create div with the possible answer.
                 let div = document.createElement("div")
                 div.className = "p-2 clickable flex justify-center text-white font-bold border-solid border-2 border-black"
                 div.innerText = answer
                 answerIndex++
-                div.id = "A"+answerIndex
+                div.id = "A"+answerIndex.toString().padStart(2, "0")
                 //Put div on screen inside the answerGroup div
                 document.getElementById("answersGroup"+answerGroupIndex).appendChild(div)
             })
+            //Shuffle answers array.
+            let answersHTMLCollectionToArray = [...document.getElementById("answersGroup"+answerGroupIndex).children]
+            let sortedArray = answersHTMLCollectionToArray.sort( () => .5 - Math.random() )
+            //To apply new sorted array replacing old HTMLCollection: iterate every child, take it and put it in the collection after removing it from parent node, wherever it is in the DOM.
+            sortedArray.forEach((elem) => elem.parentNode.appendChild(elem.parentNode.removeChild(elem)))
         })
+        
+        //fillable.sort( () => .5 - Math.random() );
         //Check if current module, submodule and exercise was answered and saved in progress.
         progress.forEach((item) => {
             progressModule = item.substr(1,2)*1 //M[xx]
@@ -128,11 +136,11 @@ exercises.forEach((element) => {
             progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
             if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
                 fillableId = item.substr(9,2) //MxxSxxExx[Fx]
-                answerId = item.substr(11,2) //MxxSxxExxFx[Ax]
+                answerId = item.substr(11,3) //MxxSxxExxFx[Axx]
                 document.querySelector("#"+fillableId).innerText = document.querySelector("#"+answerId).innerText
                 //Check if answer was corrected by the teacher.
-                if(item.length > 13){
-                    resultId = item.substr(13,2) //MxxSxxExxFxAx[Rx]
+                if(item.length > 14){
+                    resultId = item.substr(14,2) //MxxSxxExxFxAxx[Rx]
                     resultRight = resultId.substr(1)*1
                     document.querySelector("#"+fillableId).classList.remove("bg-gray-200")
                     document.querySelector("#"+fillableId).classList.add("hover:cursor-pointer", resultRight ? "bg-green-400" : "bg-red-600")
@@ -165,29 +173,29 @@ exercises.forEach((element) => {
                             previousExercise = element["3_exercise"]
                         } else { 
                             //Exercise is greater than the one to show, so update all next data.
+                            if(nextModule == null && nextSubmodule == null && nextExercise == null){
+                                nextModule = nextModule == null ? element["1_module"] : nextModule
+                                nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
+                                nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                            }
+                        }
+                    } else {
+                        //Submodule is greater than the one to show.
+                        if(nextModule == null && nextSubmodule == null && nextExercise == null){
                             nextModule = nextModule == null ? element["1_module"] : nextModule
                             nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
                             nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
                         }
-                    } else {
-                        //Submodule is greater than the one to show.
-                        nextModule = nextModule == null ? element["1_module"] : nextModule
-                        nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
-                        nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
                     }
                 }
             } else {
                 //Module is greater than the one to show.
-                nextModule = nextModule == null ? element["1_module"] : nextModule
-                nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
-                nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                if(nextModule == null && nextSubmodule == null && nextExercise == null){
+                    nextModule = nextModule == null ? element["1_module"] : nextModule
+                    nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
+                    nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                }
             }
-        }
-        //If there exists a module, submodule or exercise inmediately higher than current one, then enable to get to next exercise.
-        if(element["1_module"] == module + 1 || element["2_submodule"] == submodule + 1 || element["3_exercise"] == exercise + 1){
-            nextModule = element["1_module"]
-            nextSubmodule = element["2_submodule"]
-            nextExercise = element["3_exercise"]
         }
     }
 })
@@ -217,13 +225,13 @@ var fillableClick = (e) => {
             progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
             if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
                 fillableId = item.substr(9,2) //MxxSxxExx[Fx]
-                answerId = item.substr(11,2) //MxxSxxExxFx[Ax]
+                answerId = item.substr(11,3) //MxxSxxExxFx[Axx]
                 //Was the exercise corrected by the teacher?
                 if(fillableId == selectedItem.id){
-                    if(item.length > 13){
+                    if(item.length > 14){
                         e.target.classList.remove('selected');
-                        resultId = item.substr(13,2) //MxxSxxExxFxAx[Rx]
-                        resultRight = resultId.substr(1)*1
+                        resultId = item.substr(14,2) //MxxSxxExxFxAxx[Rx]
+                        resultRight = resultId.substr(1)*1 //1 or 0
                         //Evaluate correction and prepare special panel
                         document.querySelector("#correctionInfo").classList.remove("hidden", "bg-red-400", "bg-green-200")
                         document.querySelector("#correctionInfo").classList.add(resultRight ? "bg-green-200" : "bg-red-400")
@@ -234,7 +242,7 @@ var fillableClick = (e) => {
         
                         //Was the exercise marked as wrong?
                         if(!resultRight){
-                            commentId = item.substr(15) //MxxSxxExxFxAxRx[Cxxx...]
+                            commentId = item.substr(16) //MxxSxxExxFxAxxRx[Cxxx...]
                             commentValue = commentId.substr(1)
                             document.querySelector("#commentParagraph").classList.remove("hidden")
                             document.querySelector("#retry").classList.remove("hidden")
@@ -385,6 +393,13 @@ var progressClick = (e) => {
 }
 
 document.querySelector("#progress").addEventListener('click', progressClick);
+
+// Event handler for clicking vocabulary.
+var vocabularyClick = (e) => {
+    window.location = "exercise_vocabulary.html?module="+module+"&submodule="+submodule+"&exercise="+exercise
+}
+
+document.querySelector("#vocabulary").addEventListener('click', vocabularyClick);
 
 // Event handler for clicking correction.
 var correctionClick = (e) => {
