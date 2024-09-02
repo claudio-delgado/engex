@@ -249,29 +249,29 @@ let writeExerciseInfo = () =>{
                                 previousExercise = element["3_exercise"]
                             } else { 
                                 //Exercise is greater than the one to show, so update all next data.
+                                if(nextModule == null && nextSubmodule == null && nextExercise == null){
+                                    nextModule = nextModule == null ? element["1_module"] : nextModule
+                                    nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
+                                    nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                                }
+                            }
+                        } else {
+                            //Submodule is greater than the one to show.
+                            if(nextModule == null && nextSubmodule == null && nextExercise == null){
                                 nextModule = nextModule == null ? element["1_module"] : nextModule
                                 nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
                                 nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
                             }
-                        } else {
-                            //Submodule is greater than the one to show.
-                            nextModule = nextModule == null ? element["1_module"] : nextModule
-                            nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
-                            nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
                         }
                     }
                 } else {
                     //Module is greater than the one to show.
-                    nextModule = nextModule == null ? element["1_module"] : nextModule
-                    nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
-                    nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                    if(nextModule == null && nextSubmodule == null && nextExercise == null){
+                        nextModule = nextModule == null ? element["1_module"] : nextModule
+                        nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
+                        nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                    }
                 }
-            }
-            //If there exists a module, submodule or exercise inmediately higher than current one, then enable to get to next exercise.
-            if(element["1_module"] == module + 1 || element["2_submodule"] == submodule + 1 || element["3_exercise"] == exercise + 1){
-                nextModule = element["1_module"]
-                nextSubmodule = element["2_submodule"]
-                nextExercise = element["3_exercise"]
             }
         }
     })
