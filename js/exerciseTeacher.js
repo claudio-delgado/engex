@@ -75,6 +75,8 @@ exercises.forEach((element) => {
         })
         //Answer group index.
         let answerGroupIndex = 0
+        //Answer index.
+        let answerIndex = 0;
         //Iterate possible answers in exercise.
         element["5_possibleAnswers"].forEach((fillable) => {
             //Create div with the collection of answers.
@@ -84,15 +86,13 @@ exercises.forEach((element) => {
             div.id = "answersGroup"+answerGroupIndex
             //Put div on screen
             document.getElementById('answersFrame').appendChild(div)
-            //Answer index.
-            let answerIndex = 0;
             fillable.forEach((answer) => {
                 //Create div with the possible answer.
                 let div = document.createElement("div")
                 div.className = "p-2 clickable flex justify-center text-white font-bold border-solid border-2 border-black"
                 div.innerText = answer
                 answerIndex++
-                div.id = "A"+answerIndex
+                div.id = "A"+answerIndex.toString().padStart(2, "0")
                 //Put div on screen inside the answerGroup div
                 document.getElementById("answersGroup"+answerGroupIndex).appendChild(div)
             })
@@ -155,29 +155,30 @@ exercises.forEach((element) => {
                             previousExercise = element["3_exercise"]
                         } else { 
                             //Exercise is greater than the one to show, so update all next data.
-                            nextModule = nextModule == null ? element["1_module"] : nextModule
-                            nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
-                            nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                            if(nextModule == null && nextSubmodule == null && nextExercise == null){
+                                nextModule = nextModule == null ? element["1_module"] : nextModule
+                                nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
+                                nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                            }
                         }
                     } else {
                         //Submodule is greater than the one to show.
-                        nextModule = nextModule == null ? element["1_module"] : nextModule
-                        nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
-                        nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                        if(nextModule == null && nextSubmodule == null && nextExercise == null){
+                            nextModule = nextModule == null ? element["1_module"] : nextModule
+                            nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
+                            nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                    
+                        }
                     }
                 }
             } else {
                 //Module is greater than the one to show.
-                nextModule = nextModule == null ? element["1_module"] : nextModule
-                nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
-                nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                if(nextModule == null && nextSubmodule == null && nextExercise == null){
+                    nextModule = nextModule == null ? element["1_module"] : nextModule
+                    nextSubmodule = nextSubmodule == null ? element["2_submodule"] : nextSubmodule
+                    nextExercise = nextExercise == null ? element["3_exercise"] : nextExercise
+                }
             }
-        }
-        //If there exists a module, submodule or exercise inmediately higher than current one, then enable to get to next exercise.
-        if(element["1_module"] == module + 1 || element["2_submodule"] == submodule + 1 || element["3_exercise"] == exercise + 1){
-            nextModule = element["1_module"]
-            nextSubmodule = element["2_submodule"]
-            nextExercise = element["3_exercise"]
         }
     }
 })
