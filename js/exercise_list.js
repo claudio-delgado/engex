@@ -65,7 +65,7 @@ exercises.forEach((item) => {
         //Put header on accordion, show on screen
         document.getElementById('exercise-collapse').appendChild(H2)
         //Check progress for this exercise.
-        let exerciseAnswers = [], exerciseFullyCorrected = false, fillableNbr = null
+        let exerciseAnswers = [], exerciseCorrections = [], exerciseFullyCorrected = false, fillableNbr = null
         progress.forEach((progressItem) => {
             progressModule = progressItem.substr(1,2)*1 //M[xx]
             progressSubmodule = progressItem.substr(4,2)*1 //MxxS[xx]
@@ -73,9 +73,20 @@ exercises.forEach((item) => {
             if(progressModule == item["1_module"] && progressSubmodule == item["2_submodule"] && progressExercise == item["3_exercise"]){
                 fillableNbr = progressItem.substr(10,1)-1 //MxxSxxExxF[x]
                 answerNbr = progressItem.substr(12,2)-1 //MxxSxxExxFxA[xx]
+                //In order to obtain particular index inside answer group (for current fillable), accumulate answer number sum and get new index inside current group.
+                let accumulated = 0
+                item["5_possibleAnswers"].forEach((elem, index)=>{
+                    if(index < fillableNbr){
+                        accumulated+= elem.length
+                    }
+                })
+                answerNbr = answerNbr - accumulated
                 exerciseAnswers.push(item["5_possibleAnswers"][fillableNbr][answerNbr])
                 exerciseFullyCorrected = !fillableNbr ? true : exerciseFullyCorrected
-                exerciseFullyCorrected&&= progressItem.length > 14
+                answerCorrected = progressItem.length > 14
+                exerciseFullyCorrected&&= answerCorrected
+                
+                exerciseCorrections[fillableNbr] = answerCorrected ? (progressItem.substr(15,1)*1 ? 1 : 2) : 0 
             }
         })
         let div1 = document.createElement("div")
@@ -92,13 +103,29 @@ exercises.forEach((item) => {
         span1.className = "leading-tight"
         let fullAnswered = true, corrected = false
         exerciseWords.forEach((word) => {
+            let wordHTML = ""
             //If it's a number, then it represents a blank for an answer.
             if(typeof(word) == 'number'){
                 fillableNbr = word*1
-                word = " __"+(exerciseAnswers[fillableNbr] ? "<strong>"+exerciseAnswers[fillableNbr]+"</strong>" : "?")+"__ "
+                wordHTML = (exerciseAnswers[fillableNbr] 
+                        ? "<strong class=\"px-2 filled mx-1 "+
+                            (exerciseCorrections[fillableNbr] 
+                                ? (exerciseCorrections[fillableNbr] == 1 
+                                    ? "bg-green-500" 
+                                    : "bg-red-500") 
+                                : "bg-pink-400")+
+                        " border border-1 border-black\">"+
+                        exerciseAnswers[fillableNbr]+
+                            (exerciseCorrections[fillableNbr] 
+                                ? (exerciseCorrections[fillableNbr] == 1 
+                                    ? "<i class=\"fa fa-check text-green-700 ms-2\"></i>" 
+                                    : "<i class=\"fa fa-times text-red-700 ms-2\"/></i>") 
+                                : "")+
+                        "</strong>" 
+                        : "<strong class=\"px-2 mx-1 bg-white border border-1 border-black\">?</strong>")
                 fullAnswered &&= (exerciseAnswers[fillableNbr])
             }
-            span1.innerHTML+= word+" "
+            span1.innerHTML+= (wordHTML ? wordHTML : word)+" "
         })
         p1.appendChild(span1)
         div2.appendChild(p1)
