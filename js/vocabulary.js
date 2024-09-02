@@ -300,5 +300,120 @@ let exercise_vocabulary = [
             }
         ],
         "5_translation": "Paul ___ sediento. (tiene sed)"
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 6,
+        "4_words": [
+            {
+                "1_token" : "I",
+                "2_translations" : [
+                    [
+                        {"answer": "Es un nombre de persona", "correct" : false},
+                        {"answer": "Es un pronombre", "correct" : true},
+                        {"answer": "Es un verbo", "correct" : false},
+                        {"answer": "Es un adjetivo", "correct" : false}
+                    ],
+                    [
+                        {"answer": "Significa 'Y'", "correct" : false},
+                        {"answer": "Significa 'Yo'", "correct" : true},
+                        {"answer": "1era persona del singular", "correct" : true},
+                        {"answer": "Significa 'Vos'", "correct" : false}
+                    ]
+                ]
+            },
+            {
+                "1_token" : "not",
+                "2_translations" : [
+                    [
+                        {"answer": "Es un verbo", "correct" : false},
+                        {"answer": "Es una preposición", "correct" : false},
+                        {"answer": "Es un adjetivo", "correct" : false},
+                        {"answer": "Se usa para negar un verbo", "correct" : true}
+                    ],
+                    [
+                        {"answer": "Se puede utilizar como única respuesta", "correct" : false},
+                        {"answer": "Siempre debe acompañar a otra palabra", "correct" : true},
+                        {"answer": "Se usa igual que 'No'", "correct" : false}
+                    ]
+                ]
+            },
+            {
+                "1_token" : "rich",
+                "2_translations" : [
+                    [
+                        {"answer": "Es un verbo", "correct" : false},
+                        {"answer": "Es un nombre de persona", "correct" : false},
+                        {"answer": "Es un adjetivo", "correct" : true},
+                        {"answer": "Es sinónimo de 'pobre'", "correct" : false}
+                    ],
+                    [
+                        {"answer": "Significa 'pobre'", "correct" : false},
+                        {"answer": "Significa 'rico'", "correct" : true},
+                        {"answer": "Significa 'alcanzar'", "correct" : false}
+                    ]
+                ]
+            }
+        ],
+        "5_translation": "Yo no ___ rico."
+    },
+    {
+        "1_module": 1,
+        "2_submodule": 1,
+        "3_exercise": 7,
+        "4_words": [
+            {
+                "1_token" : "This",
+                "2_translations" : [
+                    [
+                        {"answer": "Es un nombre de persona", "correct" : false},
+                        {"answer": "Sirve para indicar algo", "correct" : true},
+                        {"answer": "Es un verbo", "correct" : false},
+                        {"answer": "Es un adjetivo", "correct" : false},
+                        {"answer": "Es un pronombre demostrativo", "correct" : true}
+                    ],
+                    [
+                        {"answer": "Significa 'este'/'esta'/'esto'", "correct" : true},
+                        {"answer": "Significa 'Ellos'", "correct" : false},
+                        {"answer": "1era persona del plural", "correct" : false},
+                        {"answer": "Indica algo cercano", "correct" : true},
+                        {"answer": "Indica algo lejano", "correct" : false}
+                    ]
+                ]
+            },
+            {
+                "1_token" : "bag",
+                "2_translations" : [
+                    [
+                        {"answer": "Es un verbo", "correct" : false},
+                        {"answer": "Es un sustantivo", "correct" : true},
+                        {"answer": "Es un adjetivo", "correct" : false},
+                        {"answer": "Significa 'bicho'", "correct" : false}
+                    ],
+                    [
+                        {"answer": "Significa 'vago'/'vaga'", "correct" : false},
+                        {"answer": "Significa 'bolso'/'bolsa'", "correct" : true},
+                        {"answer": "Está en plural", "correct" : false}
+                    ]
+                ]
+            },
+            {
+                "1_token" : "heavy",
+                "2_translations" : [
+                    [
+                        {"answer": "Es un verbo", "correct" : false},
+                        {"answer": "Es un nombre de persona", "correct" : false},
+                        {"answer": "Es un adjetivo", "correct" : true}
+                    ],
+                    [
+                        {"answer": "Significa 'suave'", "correct" : false},
+                        {"answer": "Significa 'pesado'", "correct" : true},
+                        {"answer": "Significa 'liviano'", "correct" : false}
+                    ]
+                ]
+            }
+        ],
+        "5_translation": "Esta bolsa ___ pesada."
     }
 ]
