@@ -147,28 +147,26 @@ let writeExerciseInfo = () =>{
             let wordAmount = element["4_words"].length
             element["4_words"].forEach((word, windex) => {
                 //Distinguish between a normal word and a fillable expected answer.
-                let isNormalWord = typeof(word) == 'string'//isNaN(+word);
-                let currentWord = isNormalWord ? word.replace(".", "") : word
+                let isNormalWord = typeof(word) == 'string'
                 let lastWord = windex+1 == wordAmount
-                //Complete exercise words.
-                let classes = " "+(!isNormalWord ? unselectabledWordClasses : (currentWordIndex == vocabularyWordIndex ? selectedWordClasses + " clicked" : unselectedWordClasses))
-                if(!exerciseWordListBlocked){
-                    document.querySelector("#exercise_words").innerHTML+= "<span"+(isNormalWord ? " data-index=\""+currentWordIndex+"\"":"")+" class=\"mx-2"+classes+(lastWord ? " me-0" : "")+"\">"+(isNormalWord ? currentWord : "__?__")+"</span>"+(lastWord ? "." : "")
-                }
-                if(isNormalWord &&  currentWordIndex == vocabularyWordIndex){
-                    let vocabularyFound = false
+                let currentWord = isNormalWord && lastWord ? word.replace(".", "") : word
+                let wordVocabularyFound
+                let exerciseVocabularyFound = false
+                if(isNormalWord /*&& currentWordIndex == vocabularyWordIndex*/){
+                    wordVocabularyFound = false
                     //Iterate vocabulary elements.
                     exercise_vocabulary.forEach((vocElem) => {
                         //Exercise found? Then process each word separately.
                         if(vocElem["1_module"] == module && vocElem["2_submodule"] == submodule && vocElem["3_exercise"] == exercise){
-                            vocabularyFound = true
+                            exerciseVocabularyFound = true
                             translation = vocElem["5_translation"]
                             //Iterate current exercise vocabulary word groups.
                             vocElem["4_words"].forEach((vocToken, tokenIndex) => {
-                                if(vocabularyWordIndex == tokenIndex){
-                                    let token = vocToken["1_token"]
-                                    vocabularyMaxGroupIndex = vocToken["2_translations"].length
-                                    if(token == currentWord) {
+                                let token = vocToken["1_token"]
+                                vocabularyMaxGroupIndex = vocToken["2_translations"].length
+                                if(token == currentWord) {
+                                    wordVocabularyFound = true
+                                    if(currentWordIndex == vocabularyWordIndex){
                                         document.querySelector("#tokenWord").classList.remove(...wrongWordClasses.split(" "))
                                         document.querySelector("#tokenWord").classList.add(...selectedWordClasses.split(" "))
                                         document.querySelector("#tokenWord").innerText = currentWord
@@ -205,7 +203,7 @@ let writeExerciseInfo = () =>{
                             })
                         }
                     })
-                    if(!vocabularyFound){
+                    if(!exerciseVocabularyFound){
                         let tokenWord = document.querySelector("#tokenWord")
                         tokenWord.classList.add(...selectedWordClasses.split(" "))
                         tokenWord.innerText = currentWord
@@ -214,6 +212,11 @@ let writeExerciseInfo = () =>{
                         //vocAnswers.classList.remove("text-3vw")
                         vocAnswers.className+= " text-red-500 text-2vw"
                     }
+                }
+                //Complete exercise words.
+                let classes = " "+(!isNormalWord ? unselectabledWordClasses : (!wordVocabularyFound && exerciseVocabularyFound ? completedWordClasses : (currentWordIndex == vocabularyWordIndex ? selectedWordClasses + " clicked" : unselectedWordClasses)))
+                if(!exerciseWordListBlocked){
+                    document.querySelector("#exercise_words").innerHTML+= "<span"+(isNormalWord ? " data-index=\""+currentWordIndex+"\"":"")+" class=\"mx-2"+classes+(lastWord ? " me-0" : "")+"\">"+(isNormalWord ? currentWord : "__?__")+"</span>"+(lastWord ? "." : "")
                 }
                 currentWordIndex+= isNormalWord
             })
