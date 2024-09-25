@@ -66,8 +66,8 @@ let alertRetry = {
 //Build exercise items.
 
 //Build exercises with module and submodule associated info.
-let exercises_modules = join(exercises, modules, "1_module")
-exercises = join(exercises_modules, submodules, "2_submodule")
+let exercises_modules = join(exercises, modules, ["1_module"])
+exercises = join(exercises_modules, submodules, ["1_module", "2_submodule"])
 
 //Iterate exercises in the array.
 exercises.forEach((element) => {
@@ -81,72 +81,104 @@ exercises.forEach((element) => {
         document.querySelector("#module_info").innerHTML = element["1_module_info"]
         document.querySelector("#submodule_info").innerHTML = element["2_submodule_info"]
         document.querySelector("#exercise_info").innerHTML = element["3_exercise_info"]
-        //Iterate words in exercise.
-        element["4_words"].forEach((word) => {
-            //Distinguish between a normal word and a fillable expected answer.
-            let isNormalWord = typeof(word) == 'string'//isNaN(+word);
-            
-            //Create div with the word or ? mark.
-            let div = document.createElement("div")
-            div.className = "py-2 px-0 flex justify-center font-bold border-solid border-2 border-black "+(isNormalWord ? "text-white bg-red-500" : "text-black bg-gray-200 fillable")           
-            div.innerText = isNormalWord ? word : "?"
-            if(!isNormalWord){
-                fillableIndex ++
-                div.id = "F"+fillableIndex
-            }
-            //Put div on screen
-            document.getElementById('exerciseFrame').appendChild(div)
-        })
-        document.querySelector("#exerciseNotes").innerHTML = element["5_notes"] != null ? element["5_notes"] : ""
-        //Answer group index.
-        let answerGroupIndex = 0
-        //Answer index.
-        let answerIndex = 0;
-        //Iterate possible answers in exercise.
-        element["5_possibleAnswers"].forEach((fillable) => {
-            //Create div with the collection of answers.
-            let div = document.createElement("div")
-            div.className = "w-full answerGroup grid grid-flow-col justify-stretch p-1"
-            answerGroupIndex++
-            div.id = "answersGroup"+answerGroupIndex
-            //Put div on screen
-            document.getElementById('answersFrame').appendChild(div)
-            fillable.forEach((answer) => {
-                //Create div with the possible answer.
-                let div = document.createElement("div")
-                div.className = "p-2 clickable flex justify-center text-white font-bold border-solid border-2 border-black"
-                div.innerText = answer
-                answerIndex++
-                div.id = "A"+answerIndex.toString().padStart(2, "0")
-                //Put div on screen inside the answerGroup div
-                document.getElementById("answersGroup"+answerGroupIndex).appendChild(div)
-            })
-            //Shuffle answers array.
-            let answersHTMLCollectionToArray = [...document.getElementById("answersGroup"+answerGroupIndex).children]
-            let sortedArray = answersHTMLCollectionToArray.sort( () => .5 - Math.random() )
-            //To apply new sorted array replacing old HTMLCollection: iterate every child, take it and put it in the collection after removing it from parent node, wherever it is in the DOM.
-            sortedArray.forEach((elem) => elem.parentNode.appendChild(elem.parentNode.removeChild(elem)))
-        })
         
-        //fillable.sort( () => .5 - Math.random() );
-        //Check if current module, submodule and exercise was answered and saved in progress.
-        progress.forEach((item) => {
-            progressModule = item.substr(1,2)*1 //M[xx]
-            progressSubmodule = item.substr(4,2)*1 //MxxS[xx]
-            progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
-            if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
-                fillableId = item.substr(9,2) //MxxSxxExx[Fx]
-                answerId = item.substr(11,3) //MxxSxxExxFx[Axx]
-                document.querySelector("#"+fillableId).innerText = document.querySelector("#"+answerId).innerText
-                //Check if answer was corrected by the teacher.
-                if(item.length > 14){
-                    resultId = item.substr(14,2) //MxxSxxExxFxAxx[Rx]
-                    resultRight = resultId.substr(1)*1
-                    document.querySelector("#"+fillableId).classList.remove("bg-gray-200")
-                    document.querySelector("#"+fillableId).classList.add("hover:cursor-pointer", resultRight ? "bg-green-400" : "bg-red-600")
+        //Check type of exercise.
+        if(element["0_type"] == "Fill in blanks"){
+            //Iterate words in exercise.
+            element["4_words"].forEach((word) => {
+                //Distinguish between a normal word and a fillable expected answer.
+                let isNormalWord = typeof(word) == 'string'//isNaN(+word);
+                
+                //Create div with the word or ? mark.
+                let div = document.createElement("div")
+                div.className = "py-2 px-0 flex justify-center font-bold border-solid border-2 border-black "+(isNormalWord ? "text-white bg-red-500" : "text-black bg-gray-200 fillable")           
+                div.innerText = isNormalWord ? word : "?"
+                if(!isNormalWord){
+                    fillableIndex ++
+                    div.id = "F"+fillableIndex
                 }
-            }
-        })
+                //Put div on screen
+                document.getElementById('exerciseFrame').className = "w-full grid grid-flow-col justify-stretch p-1 border-solid border-2 border-black bg-red-200"
+                document.getElementById('exerciseFrame').appendChild(div)
+            })
+            document.querySelector("#exerciseNotes").innerHTML = element["5_notes"] != null ? element["5_notes"] : ""
+            //Answer group index.
+            let answerGroupIndex = 0
+            //Answer index.
+            let answerIndex = 0;
+            //Iterate possible answers in exercise.
+            element["5_possibleAnswers"].forEach((fillable) => {
+                //Create div with the collection of answers.
+                let div = document.createElement("div")
+                div.className = "w-full answerGroup grid grid-flow-col justify-stretch p-1"
+                answerGroupIndex++
+                div.id = "answersGroup"+answerGroupIndex
+                //Put div on screen
+                document.getElementById('answersFrame').appendChild(div)
+                fillable.forEach((answer) => {
+                    //Create div with the possible answer.
+                    let div = document.createElement("div")
+                    div.className = "p-2 clickable flex justify-center text-white font-bold border-solid border-2 border-black"
+                    div.innerText = answer
+                    answerIndex++
+                    div.id = "A"+answerIndex.toString().padStart(2, "0")
+                    //Put div on screen inside the answerGroup div
+                    document.getElementById("answersGroup"+answerGroupIndex).appendChild(div)
+                })
+                //Shuffle answers array.
+                let answersHTMLCollectionToArray = [...document.getElementById("answersGroup"+answerGroupIndex).children]
+                let sortedArray = answersHTMLCollectionToArray.sort( () => .5 - Math.random() )
+                //To apply new sorted array replacing old HTMLCollection: iterate every child, take it and put it in the collection after removing it from parent node, wherever it is in the DOM.
+                sortedArray.forEach((elem) => elem.parentNode.appendChild(elem.parentNode.removeChild(elem)))
+            })
+            
+            //fillable.sort( () => .5 - Math.random() );
+            //Check if current module, submodule and exercise was answered and saved in progress.
+            progress.forEach((item) => {
+                progressModule = item.substr(1,2)*1 //M[xx]
+                progressSubmodule = item.substr(4,2)*1 //MxxS[xx]
+                progressExercise = item.substr(7,2)*1 //MxxSxxE[xx]
+                if(progressModule == module && progressSubmodule == submodule && progressExercise == exercise){
+                    fillableId = item.substr(9,2) //MxxSxxExx[Fx]
+                    answerId = item.substr(11,3) //MxxSxxExxFx[Axx]
+                    document.querySelector("#"+fillableId).innerText = document.querySelector("#"+answerId).innerText
+                    //Check if answer was corrected by the teacher.
+                    if(item.length > 14){
+                        resultId = item.substr(14,2) //MxxSxxExxFxAxx[Rx]
+                        resultRight = resultId.substr(1)*1
+                        document.querySelector("#"+fillableId).classList.remove("bg-gray-200")
+                        document.querySelector("#"+fillableId).classList.add("hover:cursor-pointer", resultRight ? "bg-green-400" : "bg-red-600")
+                    }
+                }
+            })
+        } else {
+            //Iterate paragraphs in exercise.
+            element["4_paragraphs"].forEach((paragraph, paragraphIndex) => {
+                let sentencesArray = paragraph.split(". ")
+                let divP = document.createElement("div")
+                divP.id = "paragraph"+paragraphIndex
+                divP.className = "p-0 m-0"
+                sentencesArray.forEach((sentence, sentenceIndex) => {
+                    let wordsArray = sentence.split(" ")
+                    let div = document.createElement("div")
+                    div.className = "w-full flex justify-stretch p-1 border-solid border-2 border-black bg-red-300"
+                    div.id = "sentence"+sentenceIndex
+                    tokenArray = element["5_word_categories"][paragraphIndex][sentenceIndex][0].split(" ")
+                    wordsArray.forEach((word, wordIndex) => {
+                        //Create span with the word.
+                        let span = document.createElement("span")
+                        span.className = "p-0 px-2 markable "+tokenArray[wordIndex]+" flex justify-center items-center font-bold border-solid border-2 border-black text-black bg-gray-300 hover:cursor-pointer mx-1"
+                        span.id = "word"+wordIndex
+                        span.innerText = word
+                        //Put div on screen
+                        //document.getElementById("sentence"+sentenceIndex).appendChild(div)
+                        div.appendChild(span)
+                    })
+                    divP.appendChild(div)
+                })
+                document.getElementById("exerciseFrame").appendChild(divP)
+            })
+        }
     } else {
         //If module found is smaller than the one to show, then update all previous data.
         if(element["1_module"] < module){
@@ -206,7 +238,11 @@ let selectedItem = null;
 let fillables = document.querySelectorAll('.fillable');
 // Find all clickable item elements.
 let clickables = document.querySelectorAll('.clickable');
+// Find all markable item elements.
+let markables = document.querySelectorAll('.markable');
+
 //M01S01E02F1A1R1;M01S01E02F2A2R1;M01S01E03F1A1R0CQU0gdmEgc/NsbyBjb24gMWVyYSBwZXJzb25hIEkgKHlvKQ==;M01S01E01F1A2R1
+
 // Event handler for clicking fillable items.
 var fillableClick = (e) => {
     e.target.classList.toggle('selected');
@@ -330,6 +366,91 @@ var clickableClick = (e) => {
     setCookie("progress", JSON.stringify(progress), 60)
 }
 
+// Event handler for clicking markable items.
+var markableClick = (e) => {
+    let hideTokens = e.target.classList.contains("marked")
+    document.querySelectorAll("#tokenList").forEach((elem) => elem.remove())
+    document.querySelectorAll(".marked").forEach((elem) => elem.classList.remove("marked"))
+    if(!hideTokens){
+        let frame = document.querySelector("#exerciseFrame")
+        let markedItem = e.target
+        markedItem = e.target.classList.contains('wordToken') || e.target.classList.contains('fa') ? markedItem.parentNode : markedItem
+        markedItem.classList.add("marked")
+        markedItem.querySelectorAll(".wordToken").forEach((elem) => elem.remove())
+        markedItem.querySelectorAll("i").forEach((elem) => elem.remove())
+        markedItem.classList.remove("bg-red-500")
+        markedItem.classList.remove("bg-green-600")
+        markedItem.classList.add("bg-gray-300")
+        markedItem.classList.remove("text-white")
+        let sentenceItem = markedItem.parentNode
+        let sentenceItemIndex = sentenceItem.id.substr(8)
+        let paragraphItem = sentenceItem.parentNode
+        let paragraphItemIndex = paragraphItem.id.substr(9)
+        let div = document.createElement("div")
+        div.id = "tokenList"
+        div.className = "m-1 flex justify-stretch p-1 border-solid border-2 border-black bg-violet-300"
+
+        //Create span with the description.
+        let span = document.createElement("span")
+        span.className = "p-0 px-2 flex justify-center font-bold border-solid border-2 border-violet-300 text-black mx-1"
+        span.id = "token"
+        span.innerHTML = "Elegí un tipo:&nbsp;"
+        div.appendChild(span)
+        wordTokens.forEach((token, tokenIndex) => {
+            //Create span with the word.
+            let span = document.createElement("span")
+            span.className = "p-0 px-2 choosable flex justify-center font-bold border-solid border-2 border-black text-violet-800 bg-violet-400 hover:cursor-pointer mx-1"
+            span.id = "token"+tokenIndex
+            span.innerText = token
+            div.appendChild(span)
+        })
+        paragraphItem.insertBefore(div, sentenceItem.nextSibling)
+        /*
+        selectedItem.classList.remove('selected');
+        selectedItem.classList.remove('fillableSelected');
+        document.querySelector("#answers").classList.add("hide");
+        //Update cookie with new answer to exercise.
+        progress.push(  "M"+module.toString().padStart(2, "0")+
+                        "S"+submodule.toString().padStart(2, "0")+
+                        "E"+exercise.toString().padStart(2, "0")+
+                        selectedItem.id+
+                        e.target.id)
+        //Save progress in cookie.
+        setCookie("progress", JSON.stringify(progress), 60)
+        */
+        // Find all choosable item elements.
+        let choosables = document.querySelectorAll('.choosable');
+        // Iterate over all choosable items and attach click event.
+        choosables.forEach(item => {
+            item.addEventListener('click', choosableClick);
+        });
+    }
+}
+
+// Event handler for clicking markable items.
+var choosableClick = (e) => {
+    let markedElement = document.querySelector(".marked")
+    let chosenTokenName = e.target.innerText
+    markedElement.classList.remove('bg-gray-300')
+    markedElement.classList.remove('bg-green-600')
+    markedElement.classList.remove('bg-red-500')
+    markedElement.classList.remove('text-black')
+    markedElement.classList.add('text-white')
+    if(markedElement.classList.contains(chosenTokenName)){
+        //Token chosen is correct.
+        markedElement.innerHTML+= "<i class='fa fa-check text-white ms-1'></i>"
+        markedElement.classList.add('bg-green-600')
+    } else {
+        //Token chosen is wrong.
+        markedElement.innerHTML+= "<i class='fa fa-times text-white ms-1'></i>"
+        markedElement.classList.add('bg-red-500')
+    }
+    markedElement.innerHTML+= "<span class='wordToken ms-1'>("+chosenTokenName.substr(0,3).toUpperCase()+")</span>"
+    markedElement.classList.remove("marked")
+    markedElement.classList.add("markable")
+    document.querySelectorAll("#tokenList").forEach((elem) => elem.remove())
+}
+
 // Iterate over all fillable items and attach click event.
 fillables.forEach(item => {
     item.addEventListener('click', fillableClick);
@@ -337,6 +458,10 @@ fillables.forEach(item => {
 // Iterate over all clickable items and attach click event.
 clickables.forEach(item => {
     item.addEventListener('click', clickableClick);
+});
+// Iterate over all markable items and attach click event.
+markables.forEach(item => {
+    item.addEventListener('click', markableClick);
 });
 
 // Event handler for clicking "reintentar" button.

@@ -50,7 +50,7 @@
         //Put header on accordion, show on screen
         document.getElementById('module-collapse').appendChild(H2)
         //Get amount of submodules for current module.
-        let moduleSubmodules = selectWhere(submodules, "1_submodule", item["1_submodule"]).length
+        let moduleSubmodules = selectWhere(submodules, "1_module", item["1_module"]).length
         
         let div1 = document.createElement("div")
         div1.id = "module-body-"+moduleNbr

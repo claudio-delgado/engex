@@ -4,6 +4,18 @@ body{
 #exerciseFrame div{
     font-size: 4vw;
 }
+#exerciseFrame .markable,
+#exerciseFrame #tokenList {
+    font-size: 1.5vw;
+}
+#exerciseFrame .wordToken {
+    font-size: 1vw;
+    font-weight: bold;
+}
+#exerciseFrame .marked{
+    background-color: rgb(85, 185, 247) !important
+}
+
 .fillable{
     background-color: rgb(229 231 235);
     font-size: 4vw;
@@ -32,6 +44,9 @@ body{
 }
 .text-3vw{
     font-size: 2.5vw;
+}
+.text-1vw{
+    font-size: .8vw;
 }
 
 /*index2.html*/

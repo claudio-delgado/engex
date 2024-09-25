@@ -65,65 +65,86 @@ exercises.forEach((item) => {
         //Put header on accordion, show on screen
         document.getElementById('exercise-collapse').appendChild(H2)
         //Check progress for this exercise.
-        let exerciseAnswers = [], exerciseCorrections = [], exerciseFullyCorrected = false, fillableNbr = null
-        progress.forEach((progressItem) => {
-            progressModule = progressItem.substr(1,2)*1 //M[xx]
-            progressSubmodule = progressItem.substr(4,2)*1 //MxxS[xx]
-            progressExercise = progressItem.substr(7,2)*1 //MxxSxxE[xx]
-            if(progressModule == item["1_module"] && progressSubmodule == item["2_submodule"] && progressExercise == item["3_exercise"]){
-                fillableNbr = progressItem.substr(10,1)-1 //MxxSxxExxF[x]
-                answerNbr = progressItem.substr(12,2)-1 //MxxSxxExxFxA[xx]
-                //In order to obtain particular index inside answer group (for current fillable), accumulate answer number sum and get new index inside current group.
-                let accumulated = 0
-                item["5_possibleAnswers"].forEach((elem, index)=>{
-                    if(index < fillableNbr){
-                        accumulated+= elem.length
-                    }
-                })
-                answerNbr = answerNbr - accumulated
-                exerciseAnswers.push(item["5_possibleAnswers"][fillableNbr][answerNbr])
-                exerciseFullyCorrected = !fillableNbr ? true : exerciseFullyCorrected
-                answerCorrected = progressItem.length > 14
-                exerciseFullyCorrected&&= answerCorrected
-                
-                exerciseCorrections[fillableNbr] = answerCorrected ? (progressItem.substr(15,1)*1 ? 1 : 2) : 0 
+        let exerciseAnswers = [], exerciseCorrections = [], exerciseFullyCorrected = false, exerciseWords = [] 
+        let fillableNbr = null
+        if(item['0_type'] == "Fill in blanks"){
+            progress.forEach((progressItem) => {
+                progressModule = progressItem.substr(1,2)*1 //M[xx]
+                progressSubmodule = progressItem.substr(4,2)*1 //MxxS[xx]
+                progressExercise = progressItem.substr(7,2)*1 //MxxSxxE[xx]
+                if(progressModule == item["1_module"] && progressSubmodule == item["2_submodule"] && progressExercise == item["3_exercise"]){
+                    fillableNbr = progressItem.substr(10,1)-1 //MxxSxxExxF[x]
+                    answerNbr = progressItem.substr(12,2)-1 //MxxSxxExxFxA[xx]
+                    //In order to obtain particular index inside answer group (for current fillable), accumulate answer number sum and get new index inside current group.
+                    let accumulated = 0
+                    item["5_possibleAnswers"].forEach((elem, index)=>{
+                        if(index < fillableNbr){
+                            accumulated+= elem.length
+                        }
+                    })
+                    answerNbr = answerNbr - accumulated
+                    exerciseAnswers.push(item["5_possibleAnswers"][fillableNbr][answerNbr])
+                    exerciseFullyCorrected = !fillableNbr ? true : exerciseFullyCorrected
+                    answerCorrected = progressItem.length > 14
+                    exerciseFullyCorrected&&= answerCorrected
+                    
+                    exerciseCorrections[fillableNbr] = answerCorrected ? (progressItem.substr(15,1)*1 ? 1 : 2) : 0 
+                }
+            })
+            exerciseWords = item["4_words"]
+        } else {
+            if(item["0_type"] == "Mark words"){
+                exerciseWords = item["4_paragraphs"][0].split(" ")
             }
-        })
+        }
         let div1 = document.createElement("div")
         div1.id = "exercise-body-"+exerciseNbr
         div1.className = "hidden text-3vw exerciseBody w-full grid grid-flow-col justify-stretch border border-1 border-pink-600"
         document.getElementById('exercise-collapse').appendChild(div1)
         let div2 = document.createElement("div")
         div2.className = "px-3 p-1 text-black bg-pink-300 items-center"
-        let exerciseWords = item["4_words"]
         let p1 = document.createElement("p")
         p1.className = "flex justify-start items-center"
         p1.innerHTML = "<img src=\"images/hellokitty-icon.png\" style=\"max-width: 8%; height: auto;\" class=\"me-2\" />"
         let span1 = document.createElement("span")
         span1.className = "leading-tight"
         let fullAnswered = true, corrected = false
+        let wordCount = 0
         exerciseWords.forEach((word) => {
             let wordHTML = ""
             //If it's a number, then it represents a blank for an answer.
-            if(typeof(word) == 'number'){
-                fillableNbr = word*1
-                wordHTML = (exerciseAnswers[fillableNbr] 
-                        ? "<strong class=\"px-2 filled mx-1 "+
-                            (exerciseCorrections[fillableNbr] 
-                                ? (exerciseCorrections[fillableNbr] == 1 
-                                    ? "bg-green-500" 
-                                    : "bg-red-500") 
-                                : "bg-pink-400")+
-                        " border border-1 border-black\">"+
-                        exerciseAnswers[fillableNbr]+
-                            (exerciseCorrections[fillableNbr] 
-                                ? (exerciseCorrections[fillableNbr] == 1 
-                                    ? "<i class=\"fa fa-check text-green-700 ms-2\"></i>" 
-                                    : "<i class=\"fa fa-times text-red-700 ms-2\"/></i>") 
-                                : "")+
-                        "</strong>" 
-                        : "<strong class=\"px-2 mx-1 bg-white border border-1 border-black\">?</strong>")
-                fullAnswered &&= (exerciseAnswers[fillableNbr])
+            if(item['0_type'] == "Fill in blanks"){
+                if(typeof(word) == 'number'){
+                    fillableNbr = word*1
+                    wordHTML = (exerciseAnswers[fillableNbr] 
+                            ? "<strong class=\"px-2 filled mx-1 "+
+                                (exerciseCorrections[fillableNbr] 
+                                    ? (exerciseCorrections[fillableNbr] == 1 
+                                        ? "bg-green-500" 
+                                        : "bg-red-500") 
+                                    : "bg-pink-400")+
+                            " border border-1 border-black\">"+
+                            exerciseAnswers[fillableNbr]+
+                                (exerciseCorrections[fillableNbr] 
+                                    ? (exerciseCorrections[fillableNbr] == 1 
+                                        ? "<i class=\"fa fa-check text-green-700 ms-2\"></i>" 
+                                        : "<i class=\"fa fa-times text-red-700 ms-2\"/></i>") 
+                                    : "")+
+                            "</strong>" 
+                            : "<strong class=\"px-2 mx-1 bg-white border border-1 border-black\">?</strong>")
+                    fullAnswered &&= (exerciseAnswers[fillableNbr])
+                }
+            } else {
+                if(item['0_type'] == "Mark words"){
+                    fullAnswered = false
+                    if(wordCount < 10){
+                        wordHTML = "<strong class=\"px-2 filled mx-1 bg-pink-400 border border-1 border-black\">"+word+"</strong>"
+                        wordCount++
+                        wordHTML+= (wordCount == 10 ? " ..." : "")
+                    } else {
+                        wordHTML = word = ""
+                    }
+                }
             }
             span1.innerHTML+= (wordHTML ? wordHTML : word)+" "
         })
