@@ -161,13 +161,13 @@ exercises.forEach((element) => {
                 sentencesArray.forEach((sentence, sentenceIndex) => {
                     let wordsArray = sentence.split(" ")
                     let div = document.createElement("div")
-                    div.className = "w-full flex justify-stretch p-1 border-solid border-2 border-black bg-red-300"
+                    div.className = "w-full flex flex-wrap justify-stretch p-1 border-solid border-2 border-black bg-red-300"
                     div.id = "sentence"+sentenceIndex
                     tokenArray = element["5_word_categories"][paragraphIndex][sentenceIndex][0].split(" ")
                     wordsArray.forEach((word, wordIndex) => {
                         //Create span with the word.
                         let span = document.createElement("span")
-                        span.className = "p-0 px-2 markable "+tokenArray[wordIndex]+" flex justify-center items-center font-bold border-solid border-2 border-black text-black bg-gray-300 hover:cursor-pointer mx-1"
+                        span.className = "p-0 px-2 my-1 markable "+tokenArray[wordIndex]+" flex justify-center items-center font-bold border-solid border-2 border-black text-black bg-gray-300 hover:cursor-pointer mx-1"
                         span.id = "word"+wordIndex
                         span.innerText = word
                         //Put div on screen
